@@ -26,5 +26,5 @@ class testApp : public ofBaseApp{
     ofEasyCam cam;
     ofLight light;
     ofMaterial material;
-
+    ofColor lightColor, materialColor;
 };

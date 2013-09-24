@@ -2,6 +2,8 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){
+    //ofBackgroundGradient( 230, 190, OF_GRADIENT_CIRCULAR);
+    ofBackground(240);
     ofSetFrameRate(60);
 
     for( int i = 0; i < 50; i++ ){
@@ -10,51 +12,35 @@ void testApp::setup(){
     ofSetSmoothLighting(true);
     ofEnableLighting();
     ofEnableAlphaBlending();
-    //ofSetGlobalAmbientColor(ofColor(0, 0, 0));
     ofSetSphereResolution(100);
+    ofEnableDepthTest();
 
-    //material.setShininess(0);
+    light.setDiffuseColor( ofColor(0.f, 255.f, 0.f));
+    // specular color, the highlight/shininess color //
+	light.setSpecularColor( ofColor(255.f, 255.f, 255.f));
+    light.setPosition(ofGetWindowWidth()/2, ofGetWindowHeight()/2 , 0);
 
-    //material.setSpecularColor(ofColor(0, 0, 255, 255));
-    //material.setEmissiveColor(ofColor(180, 180, 180, 255));
-    //material.setDiffuseColor(ofColor(0, 255, 0, 255));
-    //material.setAmbientColor(ofColor(0, 0, 255, 255*0.001));
+    material.setShininess( 30 );
 
+    lightColor.setBrightness( 84.f );
+    lightColor.setSaturation( 62.f );
+    lightColor.setHue(195.0);
 
-    light.setSpotlight( 1000, 0 );
-    //light.setOrientation( ofVec3f(100, -100, -100) );
-    setLightOri(light, ofVec3f(0,0,0));
-    light.setPosition(ofVec3f(0,700,200));
-    //light.setAmbientColor(ofColor(255, 255,255, 255*0.001));
-    light.setSpecularColor(ofFloatColor(230,230,230));
-    light.setDiffuseColor(ofFloatColor(180,180,180));
+    materialColor.setBrightness(84);
+    materialColor.setSaturation(62);
 
-    ofSetGlobalAmbientColor(ofColor(230));
-    /*
-    light.setDiffuseColor(ofFloatColor(255.0, 0.0, 0.0f));
-    light.setSpecularColor(ofColor(0, 0, 255));
-    light.setSpotlight();
-    light.setSpotConcentration(10);
-    light.setSpotlightCutOff(10);
-    setLightOri(light, ofVec3f(0,0,0));
-    light.setPosition(0, 0, 300);
-    */
+    ofSetGlobalAmbientColor(ofColor(200));
+
     cam.setTarget(ofGetWindowSize()/2);
-
-
-}
-
-void testApp::setLightOri(ofLight &light, ofVec3f rot){
-    ofVec3f xax(1, 0, 0);
-    ofVec3f yax(0, 1, 0);
-    ofVec3f zax(0, 0, 1);
-    ofQuaternion q;
-    q.makeRotate(rot.x, xax, rot.y, yax, rot.z, zax);
-    light.setOrientation(q);
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
+
+    light.setDiffuseColor(lightColor);
+    materialColor.setHue(195);
+	material.setSpecularColor( materialColor );
+
     for( vector<Particle>::iterator it=pList.begin(); it != pList.end(); ){
         it -> update();
         if( it->bIsDead ){
@@ -68,19 +54,19 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::draw(){
 
-    ofBackgroundGradient( 230, 190, OF_GRADIENT_CIRCULAR);
-
+    //ofBackgroundGradient( 230, 190, OF_GRADIENT_CIRCULAR);
+    ofSetColor(light.getDiffuseColor());
 
     cam.begin();
     cam.getTarget();
     light.enable();
-    //material.begin();
+    material.begin();
 
-    ofSetColor(255);
+    //ofSetColor(255);
     for( vector<Particle>::iterator it = pList.begin(); it != pList.end(); it++){
         it -> draw();
     }
-    //material.end();
+    material.end();
     light.disable();
     cam.end();
 
