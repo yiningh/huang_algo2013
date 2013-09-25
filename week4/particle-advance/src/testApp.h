@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "particle.h"
+#include "ofxDOF.h"
 
 class testApp : public ofBaseApp{
 
@@ -28,4 +29,5 @@ class testApp : public ofBaseApp{
     ofMaterial material;
     ofColor lightColor, materialColor, AmbientColor;
     //ofxBlur blur;
+    ofxDOF depthOfField;
 };

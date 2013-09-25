@@ -27,7 +27,7 @@ void Particle::draw(){
     }
     float agePct = 1.0 - ( (float)age / (float)lifeSpan );
     float dist = sqrt(pos.x*pos.x + pos.y*pos.y);
-    int alpha = ofMap( dist, 0, 400, 255, 50 );
+    int alpha = 255; //ofMap( dist, 0, 400, 255, 50 );
     //cout<<dist<<endl;
     ofColor ballColor = ofColor( 155, 207, 255, alpha);
     float darkness = ofMap( dist, 0, 1000, 250, 0);

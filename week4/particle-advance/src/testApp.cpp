@@ -3,9 +3,11 @@
 //--------------------------------------------------------------
 void testApp::setup(){
     //ofBackgroundGradient( 230, 190, OF_GRADIENT_CIRCULAR);
-    ofBackground(240, 240, 240);
+    //ofBackground(255);
     ofSetFrameRate(60);
     //ofSetBackgroundAuto(false);
+    ofEnableAlphaBlending();
+    depthOfField.setup(ofGetWindowWidth(), ofGetWindowHeight() );
 
     for( int i = 0; i < 100; i++ ){
         addParticle();
@@ -23,6 +25,7 @@ void testApp::setup(){
     AmbientColor = ofColor(255);
     AmbientColor.setBrightness(100);
     ofSetGlobalAmbientColor(AmbientColor);
+    //light.setAmbientColor(AmbientColor);
 
     lightColor = ofColor(255);
     lightColor.setBrightness( 200.0f );
@@ -39,10 +42,15 @@ void testApp::setup(){
 	material.setSpecularColor( materialColor );
 
     cam.setTarget(ofVec3f(0,0,0));
+
+    depthOfField.setFocalRange(100);
+    depthOfField.shadorColor.set(255,255,255,255);
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
+
+    depthOfField.setFocalDistance(250);
 
     for( vector<Particle>::iterator it=pList.begin(); it != pList.end(); ){
         it -> update();
@@ -57,9 +65,12 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::draw(){
 
+    depthOfField.begin();
+    ofClear(255,0);
+    ofBackground(230);
     //ofBackgroundGradient( 230, 190, OF_GRADIENT_CIRCULAR);
     //ofSetColor(materialColor);
-    cam.begin();
+    cam.begin( depthOfField.getDimensions() );
     cam.getTarget();
     light.enable();
     material.begin();
@@ -69,6 +80,15 @@ void testApp::draw(){
     material.end();
     light.disable();
     cam.end();
+    depthOfField.end();
+    //depthOfField.getFbo().draw(0, 0);
+    if(ofGetKeyPressed('f')){
+		depthOfField.drawFocusAssist(0, 0);
+	}
+	else{
+		depthOfField.getFbo().draw(0, 0);
+	}
+
 
 }
 
